@@ -160,6 +160,20 @@ return res.redirect(`${frontendUrl}/?funding=failed`);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+// WITHDRAWAL
+app.post('/api/withdraw', auth, async (req, res) => {
+  try {
+    const { amount, account_number, bank_code, account_name } = req.body;
+    if (!amount || amount < 1000) return res.status(400).json({ error: 'Min ₦1,000' });
+    const user = await pool.query('SELECT wallet_balance FROM users WHERE id = $1', [req.user.id]);
+    if (user.rows[0].wallet_balance < amount) return res.status(400).json({ error: 'Insufficient balance' });
+    await pool.query('UPDATE users SET wallet_balance = wallet_balance - $1 WHERE id = $2', [amount, req.user.id]);
+    await pool.query('INSERT INTO transactions (user_id, type, amount, status, description) VALUES ($1, $2, $3, $4, $5)', [req.user.id, 'withdrawal', amount, 'pending', `To ${account_number} - ${account_name}`]);
+    res.json({ message: `₦${amount} withdrawal pending to ${account_number}` });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+
 // DASHBOARD
 app.get('/api/dashboard', auth, async (req, res) => {
   try {
