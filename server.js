@@ -152,11 +152,11 @@ app.get('/api/wallet/verify', async (req, res) => {
       await pool.query('UPDATE transactions SET status = $1 WHERE paystack_ref = $2', ['completed', ref]);
       await pool.query('UPDATE users SET wallet_balance = wallet_balance + $1 WHERE id = $2', [amount, userId]);
       // Redirect to frontend success (you'll set Vercel URL later)
-              const frontendUrl = process.env.FRONTEND_URL || 'https://dav-five.vercel.app';
-        return res.redirect(`${frontendUrl}/dashboard?funding=success&amount=${amount}`);
+              const frontendUrl = process.env.FRONTEND_URL || 'https://davfx.vercel.app';
+return res.redirect(`${frontendUrl}/?funding=success&amount=${amount}`);
     }
-            const frontendUrl = process.env.FRONTEND_URL || 'https://dav-five.vercel.app';
-        return res.redirect(`${frontendUrl}/dashboard?funding=failed`);
+            const frontendUrl = process.env.FRONTEND_URL || 'https://davfx.vercel.app';
+return res.redirect(`${frontendUrl}/?funding=failed`);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
