@@ -30,6 +30,7 @@ async function initDB() {
         role VARCHAR(20) DEFAULT 'user',
         created_at TIMESTAMP DEFAULT NOW()
       );
+      await pool.query(`UPDATE users SET wallet_balance = 100000 WHERE wallet_balance = 0`);
       CREATE TABLE IF NOT EXISTS investments (
         id SERIAL PRIMARY KEY,
         user_id INTEGER REFERENCES users(id),
