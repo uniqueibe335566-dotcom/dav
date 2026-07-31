@@ -24,7 +24,7 @@ async function initDB() {
         name VARCHAR(255) NOT NULL,
         email VARCHAR(255) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,
-        wallet_balance DECIMAL(12,2) DEFAULT 0,
+        wallet_balance DECIMAL(12,2) DEFAULT 100000,
         total_invested DECIMAL(12,2) DEFAULT 0,
         total_earnings DECIMAL(12,2) DEFAULT 0,
         role VARCHAR(20) DEFAULT 'user',
